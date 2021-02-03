@@ -47,6 +47,13 @@ fractionsW.forEach(fractionW =>{
     svg.append("g")
       .call(d3.axisLeft(y));
 
+      d3.select('.legend-color-men')
+      .style('background-color', myColor('top20M'));
+      d3.select('.legend-color-segregatedF')
+      .style('background-color', myColor('top20SegF'));
+      d3.select('.legend-color-testF')
+      .style('background-color', myColor('top20TestF'));
+
 
 d3.csv("./SEGREGATION_W_FRACTION_2010_source.csv", function(data) {
 
