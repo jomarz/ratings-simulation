@@ -11,7 +11,12 @@
         
         <!-- Create a div where the graph will take place -->
         <div class="container">
-            <div id="my_dataviz"></div>
+            <div class="plot-container">
+                <div id="my_dataviz"></div>
+                <div class="plot-legend">
+                    
+                </div>
+            </div>
             <div class="controls">
                 <div class="new-plot-options">
                     <div class="fraction-w-options option-group">
@@ -109,6 +114,7 @@
                     </div>
                 </div>
                 <button onclick="addNewSeries()" >Add to plot</button>
+                <button onclick="clearPlot()" >Clear plot</button>
             </div>
         </div>
 

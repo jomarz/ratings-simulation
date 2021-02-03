@@ -68,11 +68,6 @@ d3.csv("./SEGREGATION_W_FRACTION_2010_source.csv", function(data) {
         );
     });
        
-      plotGroup('0.5', '0.4', 'top20TestF');
-      plotGroup('0.5', '0.4', 'top20SegF');
-      plotGroup('0.5', '0.4', 'top20M');
-
-
 });
 
 const plotGroup = function(fractionW, segregationPref, group)
@@ -89,9 +84,9 @@ const plotGroup = function(fractionW, segregationPref, group)
       .attr("d", function(d){ 
         return line(d.values) } )
       .attr("stroke", function(d){ return myColor(group) })
-      //.attr("stroke", "red")
       .style("stroke-width", 1)
-      .style("fill", "none");
+      .style("fill", "none")
+      .attr("class","series");
 }
 
 const addNewSeries = function()
@@ -102,4 +97,7 @@ const addNewSeries = function()
     plotGroup(fractionW, segPreference, groupToPlot);
 }
 
-
+const clearPlot = function()
+{
+    d3.selectAll("svg path.series").remove();
+}

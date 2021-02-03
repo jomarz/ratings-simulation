@@ -33,3 +33,9 @@ body {
 .controls .label {
     font-size: 1rem;
 }
+
+.controls button {
+    height: 2rem;
+    border-radius: 0.2rem;
+    margin: 10px 0 10px;
+}
