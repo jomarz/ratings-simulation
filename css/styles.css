@@ -42,11 +42,12 @@ body {
 
 .plot-legend {
     display: flex;
-    margin: 10px 10px 10px 80px;
+    margin: 10px 10px 10px 40px;
 }
 .legend-item {
     display: flex;
     margin-right: 30px;
+    font-size: 0.8rem;
 }
 .legend-color {
     border-style: 1px;

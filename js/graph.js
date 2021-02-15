@@ -17,7 +17,6 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
     "translate(" + margin.left + "," + margin.top + ")");
 
-
 lastStep = 500; // Steps start at 0
 const fractionsW = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
 const segPreferences = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
@@ -47,7 +46,7 @@ svg.append("g")
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([2200, 3300])
+    .domain([2200, 3200])
     .range([height, 0]);
 svg.append("g")
     .call(d3.axisLeft(y));
@@ -80,38 +79,58 @@ data.forEach(row => {
 
 });
 
+var numGroupsTop20 = 0;
 const plotGroup = function (fractionW, segregationPref, group) {
-var runsToChart = Object.values(runs[fractionW][segregationPref]);
-// Add the lines
-var line = d3.line()
-    .x(function (d) {
-        return x(+d.step)
-    })
-    .y(function (d) {
-        return y(+d[group])
-    })
-svg.selectAll("myLines")
-    .data(runsToChart)
-    .enter()
-    .append("path")
-    .attr("d", function (d) {
-        return line(d.values)
-    })
-    .attr("stroke", function (d) {
-        return myColor(group)
-    })
-    .style("stroke-width", 1)
-    .style("fill", "none")
-    .attr("class", "series");
+    var runsToChart = Object.values(runs[fractionW][segregationPref]);
+    // Add the lines
+    var newColor = getNewColor();
+    var line = d3.line()
+        .x(function (d) {            
+            return x(+d.step)
+        })
+        .y(function (d) {
+            return y(+d[group])
+        })
+    svg.selectAll("myLines")
+        .data(runsToChart)
+        .enter()
+        .append("path")
+        .attr("d", function (d) {
+            return line(d.values)
+        })
+        .attr("stroke", function (d) {
+            return newColor;
+        })
+        .style("stroke-width", 1)
+        .style("fill", "none")
+        .attr("class", "series");        
 }
 
-const addNewSeries = function () {
+const addNewSeries = function () 
+{
     let fractionW = d3.select('input[name="fractionW"]:checked').node().value;
     let segPreference = d3.select('input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('input[name="groupToPlot"]:checked').node().value;
     plotGroup(fractionW, segPreference, groupToPlot);
+    insertLegendItem(groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor());
+    numGroupsTop20 ++;
 }
 
-const clearPlot = function () {
+const clearPlot = function () 
+{
     d3.selectAll("svg path.series").remove();
+}
+
+const getNewColor = function ()
+{
+    const colors = d3.schemeTableau10.concat(d3.schemeSet2);
+    index = numGroupsTop20 % colors.length;
+    return colors[index];
+}
+
+const insertLegendItem = function(name, color) 
+{
+    const legendItem = d3.select(".plot-legend").append("div").attr("class", "legend-item");
+    legendItem.append("div").attr("class", "legend-color").style('background-color', color)
+    legendItem.append("div").attr("class", "legend-text").text(name);
 }
