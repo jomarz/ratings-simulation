@@ -9,7 +9,10 @@ body {
     display: flex;
     margin: 0 20px;
 }
-
+.diff-dashboard {
+    /* Initially hide this dashboard */
+    display: none;
+}
 .controls {
     display: flex;
     flex-direction: column;
