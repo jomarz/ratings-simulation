@@ -172,9 +172,10 @@ const addNewDiffSeries = function ()
     numGroupsDiff ++;
 }
 
-const clearPlot = function () 
+const clearPlot = function ()
 {
     d3.selectAll("svg path.series").remove();
+    d3.selectAll(".plot-legend .legend-item").remove();
 }
 
 const getNewColor = function ()
