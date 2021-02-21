@@ -159,7 +159,7 @@ const addNewSeries = function ()
     let segPreference = d3.select('.top20-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.top20-dashboard input[name="groupToPlot"]:checked').node().value;
     plotGroup(fractionW, segPreference, groupToPlot);
-    insertLegendItem(groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor());
+    insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor());
     numGroupsTop20 ++;
 }
 const addNewDiffSeries = function () 
@@ -168,7 +168,7 @@ const addNewDiffSeries = function ()
     let segPreference = d3.select('.diff-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.diff-dashboard input[name="groupToPlot"]:checked').node().value;
     plotDiffGroup(fractionW, segPreference, groupToPlot);
-    insertLegendItem(groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewDiffColor());
+    insertLegendItem("ratingDiff-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewDiffColor());
     numGroupsDiff ++;
 }
 
@@ -191,9 +191,9 @@ const getNewDiffColor = function ()
     return colors[index];
 }
 
-const insertLegendItem = function(name, color) 
+const insertLegendItem = function(legendId, name, color) 
 {
-    const legendItem = d3.select(".plot-legend").append("div").attr("class", "legend-item");
+    const legendItem = d3.select("#"+legendId).append("div").attr("class", "legend-item");
     legendItem.append("div").attr("class", "legend-color").style('background-color', color)
     legendItem.append("div").attr("class", "legend-text").text(name);
 }
