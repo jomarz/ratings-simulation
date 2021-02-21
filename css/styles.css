@@ -16,6 +16,7 @@ body {
 .controls {
     display: flex;
     flex-direction: column;
+    min-width: 420px;
 }
 
 .controls .new-plot-options {
@@ -45,12 +46,13 @@ body {
 
 .plot-legend {
     display: flex;
+    flex-wrap: wrap;
     margin: 10px 10px 10px 40px;
 }
 .legend-item {
     display: flex;
-    margin-right: 30px;
     font-size: 0.8rem;
+    margin: 0 30px 20px 0;
 }
 .legend-color {
     border-style: 1px;
