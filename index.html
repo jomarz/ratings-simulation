@@ -13,7 +13,7 @@
                 <button class="dashboard-option" onclick="selectDashboard('top20-dashboard')">Top20 Ratings</button>
                 <button class="dashboard-option" onclick="selectDashboard('diff-dashboard')">Group Differences</button>
             </div>
-            <div class="container dashboard top20-dashboard">
+            <div class="container dashboard top20-dashboard" id="top20-plot-container">
                 <div class="plot-container">
                     <div id="my_dataviz"></div>
                     <div class="plot-legend" id="ratingTop20-legend">
@@ -116,10 +116,10 @@
                         </div>
                     </div>
                     <button onclick="addNewSeries()" >Add to plot</button>
-                    <button onclick="clearPlot()" >Clear plot</button>
+                    <button onclick="clearPlot('top20-plot-container')" >Clear plot</button>
                 </div>
             </div>
-            <div class="container dashboard diff-dashboard">
+            <div class="container dashboard diff-dashboard" id="diff-plot-container">
                 <div class="plot-container">
                     <div id="diff-plot"></div>
                     <div class="plot-legend" id="ratingDiff-legend"></div>
@@ -221,7 +221,7 @@
                         </div>
                     </div>
                     <button onclick="addNewDiffSeries()" >Add to plot</button>
-                    <button onclick="clearDiffPlot()" >Clear plot</button>
+                    <button onclick="clearPlot('diff-plot-container')" >Clear plot</button>
                 </div>
             </div>
         </div>
