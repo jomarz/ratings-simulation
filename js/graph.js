@@ -62,11 +62,11 @@ var y = d3.scaleLinear()
 svg.append("g")
     .call(d3.axisLeft(y));
 
-var yDiff = d3.scaleLinear()
+y = d3.scaleLinear()
     .domain([-500, 3200])
     .range([height, 0]);
 svgDiff.append("g")
-    .call(d3.axisLeft(yDiff));
+    .call(d3.axisLeft(y));
 
 d3.select('.legend-color-men')
     .style('background-color', myColor('top20M'));
