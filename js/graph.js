@@ -57,16 +57,16 @@ svgDiff.append("g")
 
 // Add Y axis
 var y = d3.scaleLinear()
-    .domain([2200, 3200])
+    .domain([2200, 3100])
     .range([height, 0]);
 svg.append("g")
     .call(d3.axisLeft(y));
 
-y = d3.scaleLinear()
-    .domain([-500, 3200])
+yDiff = d3.scaleLinear()
+    .domain([-300, 600])
     .range([height, 0]);
 svgDiff.append("g")
-    .call(d3.axisLeft(y));
+    .call(d3.axisLeft(yDiff));
 
 d3.select('.legend-color-men')
     .style('background-color', myColor('top20M'));
@@ -136,7 +136,7 @@ const plotDiffGroup = function (fractionW, segregationPref, group) {
             return x(+d.step)
         })
         .y(function (d) {
-            return y(+d[group])
+            return yDiff(+d[group])
         })
     svgDiff.selectAll("myLines")
         .data(runsToChart)
