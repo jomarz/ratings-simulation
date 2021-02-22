@@ -13,6 +13,9 @@ body {
     /* Initially hide this dashboard */
     display: none;
 }
+.dashboard-selector {
+    padding: 5px 40px;
+}
 button.dashboard-option {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
