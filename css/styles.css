@@ -13,6 +13,18 @@ body {
     /* Initially hide this dashboard */
     display: none;
 }
+button.dashboard-option {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    padding: 5px;
+}
+button.dashboard-option.active {
+    border: solid 1px rgb(87, 86, 86); 
+}
+button.dashboard-option.inactive {
+    color:rgb(121, 120, 120);
+    border: solid 1px rgb(220, 219, 219);
+}
 .controls {
     display: flex;
     flex-direction: column;

@@ -8,6 +8,14 @@ var margin = {
 width = 1060 - margin.left - margin.right,
 height = 600 - margin.top - margin.bottom;
 
+var plots = {
+    top20: {
+        numGroups: 0
+    },
+    diff: {
+        numGroups: 0
+    }
+};
 // append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
     .append("svg")
@@ -105,7 +113,7 @@ var numGroupsDiff = 0;
 const plotGroup = function (fractionW, segregationPref, group) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
     // Add the lines
-    var newColor = getNewColor();
+    var newColor = getNewColor("top20");
     var line = d3.line()
         .x(function (d) {            
             return x(+d.step)
@@ -130,7 +138,7 @@ const plotGroup = function (fractionW, segregationPref, group) {
 const plotDiffGroup = function (fractionW, segregationPref, group) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
     // Add the lines
-    var newColor = getNewDiffColor();
+    var newColor = getNewColor("diff");
     var line = d3.line()
         .x(function (d) {            
             return x(+d.step)
@@ -159,8 +167,9 @@ const addNewSeries = function ()
     let segPreference = d3.select('.top20-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.top20-dashboard input[name="groupToPlot"]:checked').node().value;
     plotGroup(fractionW, segPreference, groupToPlot);
-    insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor());
-    numGroupsTop20 ++;
+    insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("top20"));
+    plots.top20.numGroups ++;
+    //numGroupsTop20 ++;
 }
 const addNewDiffSeries = function () 
 {
@@ -168,26 +177,21 @@ const addNewDiffSeries = function ()
     let segPreference = d3.select('.diff-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.diff-dashboard input[name="groupToPlot"]:checked').node().value;
     plotDiffGroup(fractionW, segPreference, groupToPlot);
-    insertLegendItem("ratingDiff-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewDiffColor());
-    numGroupsDiff ++;
+    insertLegendItem("ratingDiff-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("diff"));
+    plots.diff.numGroups ++;
 }
 
-const clearPlot = function (containerId)
+const clearPlot = function (plotName)
 {
-    d3.selectAll("#"+containerId+" svg path.series").remove();
-    d3.selectAll("#"+containerId+" .plot-legend .legend-item").remove();
+    d3.selectAll("#"+plotName+"-plot-container svg path.series").remove();
+    d3.selectAll("#"+plotName+"-plot-container .plot-legend .legend-item").remove();
+    plots[plotName].numGroups = 0;
 }
 
-const getNewColor = function ()
+const getNewColor = function (plotName)
 {
-    const colors = d3.schemeTableau10.concat(d3.schemeSet2);
-    index = numGroupsTop20 % colors.length;
-    return colors[index];
-}
-const getNewDiffColor = function ()
-{
-    const colors = d3.schemeTableau10.concat(d3.schemeSet2);
-    index = numGroupsDiff % colors.length;
+    const colors = d3.schemeTableau10.concat(d3.schemeSet2); console.log(plots["top20"]);
+    index = plots[plotName].numGroups % colors.length;
     return colors[index];
 }
 
@@ -198,10 +202,18 @@ const insertLegendItem = function(legendId, name, color)
     legendItem.append("div").attr("class", "legend-text").text(name);
 }
 
-const selectDashboard = function(dashboard)
+const selectDashboard = function(dashboardName)
 {
-    d3.selectAll(".dashboard:not(."+dashboard+")")
+    d3.selectAll(".dashboard:not(."+dashboardName+"-dashboard)")
         .style("display", "none");
-    d3.select(".dashboard."+dashboard)
+    d3.selectAll(".dashboard-option:not(."+dashboardName+"-option)")
+        .classed("active", false).classed("inactive", true);;
+    /* d3.selectAll(".dashboard-option:not(."+dashboardName+"-option)")
+        .classed("inactive", true); */
+    d3.select(".dashboard."+dashboardName+"-dashboard")
         .style("display", "flex");
+    d3.selectAll(".dashboard-option."+dashboardName+"-option")
+        .classed("active", true).classed("inactive", false);
+    /* d3.selectAll(".dashboard-option."+dashboardName+"-option")
+        .classed("inactive", false) */
 }

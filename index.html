@@ -10,8 +10,8 @@
     <body>
         <div class="app-container">
             <div class="dashboard-selector">
-                <button class="dashboard-option" onclick="selectDashboard('top20-dashboard')">Top20 Ratings</button>
-                <button class="dashboard-option" onclick="selectDashboard('diff-dashboard')">Group Differences</button>
+                <button class="dashboard-option active top20-option" onclick="selectDashboard('top20')">Top20 Ratings</button>
+                <button class="dashboard-option inactive diff-option" onclick="selectDashboard('diff')">Group Differences</button>
             </div>
             <div class="container dashboard top20-dashboard" id="top20-plot-container">
                 <div class="plot-container">
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                     <button onclick="addNewSeries()" >Add to plot</button>
-                    <button onclick="clearPlot('top20-plot-container')" >Clear plot</button>
+                    <button onclick="clearPlot('top20')" >Clear plot</button>
                 </div>
             </div>
             <div class="container dashboard diff-dashboard" id="diff-plot-container">
@@ -221,7 +221,7 @@
                         </div>
                     </div>
                     <button onclick="addNewDiffSeries()" >Add to plot</button>
-                    <button onclick="clearPlot('diff-plot-container')" >Clear plot</button>
+                    <button onclick="clearPlot('diff')" >Clear plot</button>
                 </div>
             </div>
         </div>
