@@ -71,7 +71,7 @@ svg.append("g")
     .call(d3.axisLeft(y));
 
 yDiff = d3.scaleLinear()
-    .domain([-300, 600])
+    .domain([-100, 500])
     .range([height, 0]);
 svgDiff.append("g")
     .call(d3.axisLeft(yDiff));
