@@ -83,6 +83,24 @@ d3.select('.legend-color-segregatedF')
 d3.select('.legend-color-testF')
     .style('background-color', myColor('top20TestF'));
 
+    
+const addRunningAvgs = function (runsData, numToAvg) {
+    (Object.values(runsData)).forEach(wFractionGroup => {
+        (Object.values(wFractionGroup)).forEach(segPreferenceGroup => { 
+            (Object.values(segPreferenceGroup)).forEach(run => { 
+                let lastValues = [];
+                for (i = 0; i < run.values.length; i++) {
+                    lastValues.push(run.values[i].top20M)
+                    if ( i >= numToAvg ) {
+                        lastValues.shift();
+                    }
+                    if (i==0) { console.log(i); }
+                    run.values[i].top20MAvg = d3.mean(lastValues);
+                }
+            });
+        });
+    });
+};
 
 d3.csv("./SEGREGATION_W_FRACTION_2010_source.csv", function (data) {
 
@@ -106,10 +124,14 @@ data.forEach(row => {
     });
 });
 
+addRunningAvgs(runs, 3);
+
 });
+
 
 var numGroupsTop20 = 0;
 var numGroupsDiff = 0;
+
 const plotGroup = function (fractionW, segregationPref, group) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
     // Add the lines
