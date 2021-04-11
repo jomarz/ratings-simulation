@@ -95,7 +95,7 @@ const addRunningAvgs = function (runsData, numToAvg) {
                         lastValues.shift();
                     }
                     if (i==0) { console.log(i); }
-                    run.values[i].top20MAvg = d3.mean(lastValues);
+                    run.values[i].top20MRunningAvg = d3.mean(lastValues);
                 }
             });
         });
@@ -124,7 +124,7 @@ data.forEach(row => {
     });
 });
 
-addRunningAvgs(runs, 3);
+addRunningAvgs(runs, 7);
 
 });
 
@@ -132,7 +132,33 @@ addRunningAvgs(runs, 3);
 var numGroupsTop20 = 0;
 var numGroupsDiff = 0;
 
-const plotGroup = function (fractionW, segregationPref, group) {
+const plotGroup = function (fractionW, segregationPref, group, runningAvg = false) {
+    var runsToChart = Object.values(runs[fractionW][segregationPref]);
+    var groupToPlot = (runningAvg ? group+'RunningAvg' : group);
+    // Add the lines
+    var newColor = getNewColor("top20");
+    var line = d3.line()
+        .x(function (d) {            
+            return x(+d.step)
+        })
+        .y(function (d) {
+            return y(+d[groupToPlot])
+        })
+    svg.selectAll("myLines")
+        .data(runsToChart)
+        .enter()
+        .append("path")
+        .attr("d", function (d) {
+            return line(d.values)
+        })
+        .attr("stroke", function (d) {
+            return newColor;
+        })
+        .style("stroke-width", 1)
+        .style("fill", "none")
+        .attr("class", "series");        
+}
+const plotGroupRunningAvg = function (fractionW, segregationPref, group) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
     // Add the lines
     var newColor = getNewColor("top20");
@@ -141,7 +167,7 @@ const plotGroup = function (fractionW, segregationPref, group) {
             return x(+d.step)
         })
         .y(function (d) {
-            return y(+d[group])
+            return y(+d[group+'RunningAvg'])
         })
     svg.selectAll("myLines")
         .data(runsToChart)
@@ -183,12 +209,12 @@ const plotDiffGroup = function (fractionW, segregationPref, group) {
         .attr("class", "series");        
 }
 
-const addNewSeries = function () 
+const addNewSeries = function (runningAvg = false) 
 {
     let fractionW = d3.select('.top20-dashboard input[name="fractionW"]:checked').node().value;
     let segPreference = d3.select('.top20-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.top20-dashboard input[name="groupToPlot"]:checked').node().value;
-    plotGroup(fractionW, segPreference, groupToPlot);
+    plotGroup(fractionW, segPreference, groupToPlot, runningAvg);
     insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("top20"));
     plots.top20.numGroups ++;
     //numGroupsTop20 ++;
