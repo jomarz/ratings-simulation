@@ -88,14 +88,36 @@ const addRunningAvgs = function (runsData, numToAvg) {
     (Object.values(runsData)).forEach(wFractionGroup => {
         (Object.values(wFractionGroup)).forEach(segPreferenceGroup => { 
             (Object.values(segPreferenceGroup)).forEach(run => { 
-                let lastValues = [];
+                let lastValues = {
+                    'top20M': [], 
+                    'top20SegF': [], 
+                    'top20TestF': [], 
+                    'MDiffSegF': [], 
+                    'MDiffTestF': [], 
+                    'TestFDiffSegF': [], 
+                };
                 for (i = 0; i < run.values.length; i++) {
-                    lastValues.push(run.values[i].top20M)
+                    lastValues.top20M.push(run.values[i].top20M)
+                    lastValues.top20SegF.push(run.values[i].top20SegF)
+                    lastValues.top20TestF.push(run.values[i].top20TestF)
+                    lastValues.MDiffSegF.push(run.values[i].MDiffSegF)
+                    lastValues.MDiffTestF.push(run.values[i].MDiffTestF)
+                    lastValues.TestFDiffSegF.push(run.values[i].TestFDiffSegF)
                     if ( i >= numToAvg ) {
-                        lastValues.shift();
+                        lastValues.top20M.shift();
+                        lastValues.top20SegF.shift();
+                        lastValues.top20TestF.shift();
+                        lastValues.MDiffSegF.shift();
+                        lastValues.MDiffTestF.shift();
+                        lastValues.TestFDiffSegF.shift();
                     }
                     if (i==0) { console.log(i); }
-                    run.values[i].top20MRunningAvg = d3.mean(lastValues);
+                    run.values[i].top20MRunningAvg = d3.mean(lastValues.top20M);
+                    run.values[i].top20SegFRunningAvg = d3.mean(lastValues.top20SegF);
+                    run.values[i].top20TestFRunningAvg = d3.mean(lastValues.top20TestF);
+                    run.values[i].MDiffSegFRunningAvg = d3.mean(lastValues.MDiffSegF);
+                    run.values[i].MDiffTestFRunningAvg = d3.mean(lastValues.MDiffTestF);
+                    run.values[i].TestFDiffSegFRunningAvg = d3.mean(lastValues.TestFDiffSegF);
                 }
             });
         });
@@ -158,31 +180,7 @@ const plotGroup = function (fractionW, segregationPref, group, runningAvg = fals
         .style("fill", "none")
         .attr("class", "series");        
 }
-const plotGroupRunningAvg = function (fractionW, segregationPref, group) {
-    var runsToChart = Object.values(runs[fractionW][segregationPref]);
-    // Add the lines
-    var newColor = getNewColor("top20");
-    var line = d3.line()
-        .x(function (d) {            
-            return x(+d.step)
-        })
-        .y(function (d) {
-            return y(+d[group+'RunningAvg'])
-        })
-    svg.selectAll("myLines")
-        .data(runsToChart)
-        .enter()
-        .append("path")
-        .attr("d", function (d) {
-            return line(d.values)
-        })
-        .attr("stroke", function (d) {
-            return newColor;
-        })
-        .style("stroke-width", 1)
-        .style("fill", "none")
-        .attr("class", "series");        
-}
+
 const plotDiffGroup = function (fractionW, segregationPref, group) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
     // Add the lines
@@ -238,7 +236,7 @@ const clearPlot = function (plotName)
 
 const getNewColor = function (plotName)
 {
-    const colors = d3.schemeTableau10.concat(d3.schemeSet2); console.log(plots["top20"]);
+    const colors = d3.schemeTableau10.concat(d3.schemeSet2);
     index = plots[plotName].numGroups % colors.length;
     return colors[index];
 }
