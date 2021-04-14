@@ -1,3 +1,5 @@
+const NUM_VALUES_RUNNING_AVG = 7;
+
 // set the dimensions and margins of the graph
 var margin = {
     top: 20,
@@ -146,7 +148,7 @@ data.forEach(row => {
     });
 });
 
-addRunningAvgs(runs, 7);
+addRunningAvgs(runs, NUM_VALUES_RUNNING_AVG);
 
 });
 
@@ -181,8 +183,9 @@ const plotGroup = function (fractionW, segregationPref, group, runningAvg = fals
         .attr("class", "series");        
 }
 
-const plotDiffGroup = function (fractionW, segregationPref, group) {
+const plotDiffGroup = function (fractionW, segregationPref, group, runningAvg = false) {
     var runsToChart = Object.values(runs[fractionW][segregationPref]);
+    var groupToPlot = (runningAvg ? group+'RunningAvg' : group);
     // Add the lines
     var newColor = getNewColor("diff");
     var line = d3.line()
@@ -190,7 +193,7 @@ const plotDiffGroup = function (fractionW, segregationPref, group) {
             return x(+d.step)
         })
         .y(function (d) {
-            return yDiff(+d[group])
+            return yDiff(+d[groupToPlot])
         })
     svgDiff.selectAll("myLines")
         .data(runsToChart)
@@ -215,14 +218,13 @@ const addNewSeries = function (runningAvg = false)
     plotGroup(fractionW, segPreference, groupToPlot, runningAvg);
     insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("top20"));
     plots.top20.numGroups ++;
-    //numGroupsTop20 ++;
 }
-const addNewDiffSeries = function () 
+const addNewDiffSeries = function (runningAvg = false) 
 {
     let fractionW = d3.select('.diff-dashboard input[name="fractionW"]:checked').node().value;
     let segPreference = d3.select('.diff-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.diff-dashboard input[name="groupToPlot"]:checked').node().value;
-    plotDiffGroup(fractionW, segPreference, groupToPlot);
+    plotDiffGroup(fractionW, segPreference, groupToPlot, runningAvg);
     insertLegendItem("ratingDiff-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("diff"));
     plots.diff.numGroups ++;
 }
