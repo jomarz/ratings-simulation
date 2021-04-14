@@ -39,6 +39,14 @@ const fractionsW = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
 const segPreferences = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 const repetitions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 const groups = ['top20M', 'top20SegF', 'top20TestF'];
+const groupNames = {
+    top20M: 'M',
+    top20SegF: 'W Segregated',
+    top20TestF: 'W Test',
+    MDiffSegF: 'M - W(Seg)',
+    MDiffTestF: 'M - W(Test)',
+    TestFDiffSegF: 'W(Test) - W(Seg)'
+};
 var runs = {};
 
 fractionsW.forEach(fractionW => {
@@ -216,7 +224,7 @@ const addNewSeries = function (runningAvg = false)
     let segPreference = d3.select('.top20-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.top20-dashboard input[name="groupToPlot"]:checked').node().value;
     plotGroup(fractionW, segPreference, groupToPlot, runningAvg);
-    insertLegendItem("ratingTop20-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("top20"));
+    insertLegendItem("ratingTop20-legend", groupNames[groupToPlot]+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("top20"));
     plots.top20.numGroups ++;
 }
 const addNewDiffSeries = function (runningAvg = false) 
@@ -225,7 +233,7 @@ const addNewDiffSeries = function (runningAvg = false)
     let segPreference = d3.select('.diff-dashboard input[name="segPreference"]:checked').node().value;
     let groupToPlot = d3.select('.diff-dashboard input[name="groupToPlot"]:checked').node().value;
     plotDiffGroup(fractionW, segPreference, groupToPlot, runningAvg);
-    insertLegendItem("ratingDiff-legend", groupToPlot+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("diff"));
+    insertLegendItem("ratingDiff-legend", groupNames[groupToPlot]+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("diff"));
     plots.diff.numGroups ++;
 }
 
