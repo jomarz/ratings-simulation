@@ -10,8 +10,10 @@
     <body>
         <div class="app-container">
             <div class="dashboard-selector">
-                <button class="dashboard-option active top20-option" onclick="selectDashboard('top20')">Top20 Ratings</button>
-                <button class="dashboard-option inactive diff-option" onclick="selectDashboard('diff')">Group Differences</button>
+                <button class="dashboard-option active top20-option" onclick="selectDashboard('top20')">Top 20 ratings</button>
+                <button class="dashboard-option inactive diff-option" onclick="selectDashboard('diff')">Group Differences in the Top 20</button>
+                <button class="dashboard-option inactive diff-option" onclick="selectDashboard('param')">Learning parameters (Top 20)</button>
+                <button class="dashboard-option inactive diff-option" onclick="selectDashboard('param-diff')">Learning parameters (Group differences in Top 20)</button>
             </div>
             <div class="container dashboard top20-dashboard" id="top20-plot-container">
                 <div class="plot-container">
@@ -224,6 +226,194 @@
                     <button onclick="addNewDiffSeries()" >Add to plot</button>
                     <button onclick="addNewDiffSeries(true)" >Add running average plot</button>
                     <button onclick="clearPlot('diff')" >Clear plot</button>
+                </div>
+            </div>
+            <div class="container dashboard param-dashboard" id="param-plot-container">
+                <div class="plot-container">
+                    <div id="param-plot"></div>
+                    <div class="plot-legend" id="param-legend">
+                    </div>
+                </div>
+                <div class="controls">
+                    <div class="new-plot-options">
+                        <div class="max-benefit-w-options option-group">
+                            <p class="options-title">Maximum learning benefit</p>
+                            <div>
+                              <input type="radio" id="max-benefit0" name="max-benefit" value="0">
+                              <label for="max-benefit0">0</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit50" name="max-benefit" value="50">
+                              <label for="max-benefit50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit100" name="max-benefit" value="100">
+                              <label for="max-benefit100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit150" name="max-benefit" value="150">
+                              <label for="max-benefit150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit200" name="max-benefit" value="200">
+                              <label for="max-benefit200">200</label>
+                            </div>
+                        </div>
+                        <div class="ideal-challenge-options option-group">
+                            <p class="options-title">Ideal challenge</p>
+                            <div>
+                              <input type="radio" id="idealChallenge10" name="idealChallenge" value="10">
+                              <label for="idealChallenge10">10</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge50" name="idealChallenge" value="50">
+                              <label for="idealChallenge50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge100" name="idealChallenge" value="100">
+                              <label for="idealChallenge100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge150" name="idealChallenge" value="150">
+                              <label for="idealChallenge150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge200" name="idealChallenge" value="200">
+                              <label for="idealChallenge200">200</label>
+                            </div>
+                        </div>
+                        <div class="spread-w-options option-group">
+                            <p class="options-title">Spread of learning model</p>
+                            <div>
+                              <input type="radio" id="spread50" name="spread" value="50">
+                              <label for="spread50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread100" name="spread" value="100">
+                              <label for="spread100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread150" name="spread" value="150">
+                              <label for="spread150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread200" name="spread" value="200">
+                              <label for="spread200">200</label>
+                            </div>
+                        </div>
+                        <div class="group-to-plot-options option-group">
+                            <p class="options-title">Group to plot</p>
+                            <div>
+                              <input type="radio" id="optionPlotMParam" name="groupToPlotParam" value="top20M">
+                              <label for="optionPlotM">Men</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="optionPlotSegFParam" name="groupToPlotParam" value="top20SegF">
+                              <label for="optionPlotSegFParam">Segregated women</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="optionPlotTestFParam" name="groupToPlotParam" value="top20TestF">
+                              <label for="optionPlotTestFParam">Test women</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="addNewParamSeries()" >Add to plot</button>
+                    <button onclick="addNewParamSeries(true)" >Add running average plot</button>
+                    <button onclick="clearPlot('param')" >Clear plot</button>
+                </div>
+            </div>
+            <div class="container dashboard param-diff-dashboard" id="param-diff-plot-container">
+                <div class="plot-container">
+                    <div id="param-diff-plot"></div>
+                    <div class="plot-legend" id="param-diff-legend">
+                    </div>
+                </div>
+                <div class="controls">
+                    <div class="new-plot-options">
+                        <div class="max-benefit-diff-w-options option-group">
+                            <p class="options-title">Maximum learning benefit</p>
+                            <div>
+                              <input type="radio" id="max-benefit-diff0" name="max-benefit-diff" value="0">
+                              <label for="max-benefit-diff0">0</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit-diff50" name="max-benefit-diff" value="50">
+                              <label for="max-benefit-diff50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit-diff100" name="max-benefit-diff" value="100">
+                              <label for="max-benefit-diff100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit-diff150" name="max-benefit-diff" value="150">
+                              <label for="max-benefit-diff150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="max-benefit-diff200" name="max-benefit-diff" value="200">
+                              <label for="max-benefit-diff200">200</label>
+                            </div>
+                        </div>
+                        <div class="ideal-challenge-diff-options option-group">
+                            <p class="options-title">Ideal challenge</p>
+                            <div>
+                              <input type="radio" id="idealChallenge-diff10" name="idealChallenge-diff" value="10">
+                              <label for="idealChallenge-diff10">10</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge-diff50" name="idealChallenge-diff" value="50">
+                              <label for="idealChallenge-diff50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge-diff100" name="idealChallenge-diff" value="100">
+                              <label for="idealChallenge-diff100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge-diff150" name="idealChallenge-diff" value="150">
+                              <label for="idealChallenge-diff150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="idealChallenge-diff200" name="idealChallenge-diff" value="200">
+                              <label for="idealChallenge-diff200">200</label>
+                            </div>
+                        </div>
+                        <div class="spread-diff-w-options option-group">
+                            <p class="options-title">Spread of learning model</p>
+                            <div>
+                              <input type="radio" id="spread-diff50" name="spread-diff" value="50">
+                              <label for="spread-diff50">50</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread-diff100" name="spread-diff" value="100">
+                              <label for="spread-diff100">100</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread-diff150" name="spread-diff" value="150">
+                              <label for="spread-diff150">150</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="spread200" name="spread-diff" value="200">
+                              <label for="spread-diff200">200</label>
+                            </div>
+                        </div>
+                        <div class="group-to-plot-options option-group">
+                            <p class="options-title">Group to plot</p>
+                            <div>
+                              <input type="radio" id="optionPlotMParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
+                              <label for="optionPlotMDiff">Men</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="optionPlotSegFParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
+                              <label for="optionPlotSegFParamDiff">Segregated women</label>
+                            </div>
+                            <div>
+                              <input type="radio" id="optionPlotTestFParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
+                              <label for="optionPlotTestFParamDiff">Test women</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="addNewParamSeries()" >Add to plot</button>
+                    <button onclick="addNewParamSeries(true)" >Add running average plot</button>
+                    <button onclick="clearPlot('param')" >Clear plot</button>
                 </div>
             </div>
         </div>

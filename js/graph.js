@@ -33,12 +33,31 @@ var svgDiff = d3.select("#diff-plot")
     .append("g")
     .attr("transform",
     "translate(" + margin.left + "," + margin.top + ")");
+var svgParam = d3.select("#param-plot")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+    "translate(" + margin.left + "," + margin.top + ")");
+var svgParamDiff = d3.select("#param-diff-plot")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+    "translate(" + margin.left + "," + margin.top + ")");
 
 lastStep = 500; // Steps start at 0
 const fractionsW = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
 const segPreferences = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 const repetitions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 const groups = ['top20M', 'top20SegF', 'top20TestF'];
+const paramSeries = {
+    maxBenefits: [0, 50, 100, 150, 200],
+    idealChallenges: [10, 50, 100, 150, 200],
+    benefitSpreads: [50, 100, 150, 200]
+};
 const groupNames = {
     top20M: 'M',
     top20SegF: 'W Segregated',
@@ -47,8 +66,8 @@ const groupNames = {
     MDiffTestF: 'M - W(Test)',
     TestFDiffSegF: 'W(Test) - W(Seg)'
 };
-var runs = {};
 
+var runs = {};
 fractionsW.forEach(fractionW => {
     runs[fractionW] = {};
     segPreferences.forEach(segPreference => {
@@ -56,6 +75,18 @@ fractionsW.forEach(fractionW => {
     });
 });
 
+var paramRuns = {};
+paramSeries.maxBenefits.forEach(maxBenefit => {
+    paramRuns[maxBenefit] = {};
+    paramSeries.idealChallenges.forEach(idealChallenge => {
+        paramRuns[maxBenefit][idealChallenge] = {};
+        paramSeries.benefitSpreads.forEach(benefitSpread => {
+            paramRuns[maxBenefit][idealChallenge][benefitSpread] = {};
+        });
+    });
+});
+console.log(runs);
+console.log(paramRuns);
 // A color scale: one color for each group
 var myColor = d3.scaleOrdinal()
     .domain(groups)
@@ -72,6 +103,12 @@ svg.append("g")
 svgDiff.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x));
+svgParam.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+svgParamDiff.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
 
 // Add Y axis
 var y = d3.scaleLinear()
@@ -85,6 +122,18 @@ yDiff = d3.scaleLinear()
     .range([height, 0]);
 svgDiff.append("g")
     .call(d3.axisLeft(yDiff));
+
+yParam = d3.scaleLinear()
+    .domain([2200, 3100])
+    .range([height, 0]);
+svgParam.append("g")
+    .call(d3.axisLeft(yParam));
+
+yParamDiff = d3.scaleLinear()
+    .domain([-100, 500])
+    .range([height, 0]);
+svgParamDiff.append("g")
+    .call(d3.axisLeft(yParamDiff));
 
 d3.select('.legend-color-men')
     .style('background-color', myColor('top20M'));
@@ -121,7 +170,7 @@ const addRunningAvgs = function (runsData, numToAvg) {
                         lastValues.MDiffTestF.shift();
                         lastValues.TestFDiffSegF.shift();
                     }
-                    if (i==0) { console.log(i); }
+                    /* if (i==0) { console.log(i); } */
                     run.values[i].top20MRunningAvg = d3.mean(lastValues.top20M);
                     run.values[i].top20SegFRunningAvg = d3.mean(lastValues.top20SegF);
                     run.values[i].top20TestFRunningAvg = d3.mean(lastValues.top20TestF);
@@ -160,6 +209,30 @@ addRunningAvgs(runs, NUM_VALUES_RUNNING_AVG);
 
 });
 
+d3.csv("./PARAMETER_8pct_BASE_2010_source-table.csv", function (data) {
+var i = 0;
+    //Read the data
+  data.forEach(row => {
+      if(i==0) {console.log(row); i++;}
+      if (paramRuns[row['MAX_BENEFIT']][row['IDEAL_CHALLENGE']][row['BENEFIT_SPREAD']][row['[run number]']] === undefined) {
+          paramRuns[row['MAX_BENEFIT']][row['IDEAL_CHALLENGE']][row['BENEFIT_SPREAD']][row['[run number]']] = {
+          name: 'maxBenefit: ' + row['MAX_BENEFIT'] + ' idealChallenge: ' + row['IDEAL_CHALLENGE'] + ' benefitSpread: ' + row['BENEFIT_SPREAD'] + ' repetitionNbr: ' + row['[run number]'],
+          values: []
+          };
+      }
+      paramRuns[row['MAX_BENEFIT']][row['IDEAL_CHALLENGE']][row['BENEFIT_SPREAD']][row['[run number]']].values.push({
+          step: row['[step]'],
+          top20M: row['mean [rating] of max-n-of 20 turtles with [sex = "M"] [rating]'],
+          top20SegF: row['mean [rating] of max-n-of 20 turtles with [group = "segregated"] [rating]'],
+          top20TestF: row['mean [rating] of max-n-of 20 turtles with [group = "test"] [rating]'],
+          MDiffSegF: row['mean [rating] of max-n-of 20 turtles with [sex = "M"] [rating]'] - row['mean [rating] of max-n-of 20 turtles with [group = "segregated"] [rating]'],
+          MDiffTestF: row['mean [rating] of max-n-of 20 turtles with [sex = "M"] [rating]'] - row['mean [rating] of max-n-of 20 turtles with [group = "test"] [rating]'],
+          TestFDiffSegF: row['mean [rating] of max-n-of 20 turtles with [group = "test"] [rating]'] - row['mean [rating] of max-n-of 20 turtles with [group = "segregated"] [rating]']
+  
+      });
+  });
+  console.log(paramRuns);
+});
 
 var numGroupsTop20 = 0;
 var numGroupsDiff = 0;
@@ -263,7 +336,7 @@ const selectDashboard = function(dashboardName)
     d3.selectAll(".dashboard:not(."+dashboardName+"-dashboard)")
         .style("display", "none");
     d3.selectAll(".dashboard-option:not(."+dashboardName+"-option)")
-        .classed("active", false).classed("inactive", true);;
+        .classed("active", false).classed("inactive", true);
     /* d3.selectAll(".dashboard-option:not(."+dashboardName+"-option)")
         .classed("inactive", true); */
     d3.select(".dashboard."+dashboardName+"-dashboard")
