@@ -322,7 +322,7 @@
                     <button onclick="clearPlot('param')" >Clear plot</button>
                 </div>
             </div>
-            <div class="container dashboard param-diff-dashboard" id="param-diff-plot-container">
+            <div class="container dashboard param-diff-dashboard" id="diffParam-plot-container">
                 <div class="plot-container">
                     <div id="param-diff-plot"></div>
                     <div class="plot-legend" id="param-diff-legend">
@@ -356,23 +356,23 @@
                         <div class="ideal-challenge-diff-options option-group">
                             <p class="options-title">Ideal challenge</p>
                             <div>
-                              <input type="radio" id="idealChallenge-diff10" name="idealChallenge-diff" value="10">
+                              <input type="radio" id="idealChallenge-diff10" name="ideal-challenge-diff" value="10">
                               <label for="idealChallenge-diff10">10</label>
                             </div>
                             <div>
-                              <input type="radio" id="idealChallenge-diff50" name="idealChallenge-diff" value="50">
+                              <input type="radio" id="idealChallenge-diff50" name="ideal-challenge-diff" value="50">
                               <label for="idealChallenge-diff50">50</label>
                             </div>
                             <div>
-                              <input type="radio" id="idealChallenge-diff100" name="idealChallenge-diff" value="100">
+                              <input type="radio" id="idealChallenge-diff100" name="ideal-challenge-diff" value="100">
                               <label for="idealChallenge-diff100">100</label>
                             </div>
                             <div>
-                              <input type="radio" id="idealChallenge-diff150" name="idealChallenge-diff" value="150">
+                              <input type="radio" id="idealChallenge-diff150" name="ideal-challenge-diff" value="150">
                               <label for="idealChallenge-diff150">150</label>
                             </div>
                             <div>
-                              <input type="radio" id="idealChallenge-diff200" name="idealChallenge-diff" value="200">
+                              <input type="radio" id="idealChallenge-diff200" name="ideal-challenge-diff" value="200">
                               <label for="idealChallenge-diff200">200</label>
                             </div>
                         </div>
@@ -398,22 +398,22 @@
                         <div class="group-to-plot-options option-group">
                             <p class="options-title">Group to plot</p>
                             <div>
-                              <input type="radio" id="optionPlotMParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
-                              <label for="optionPlotMDiff">Men</label>
+                              <input type="radio" id="optionMDiffSegFParam" name="groupToPlotParamDiff" value="MDiffSegF">
+                              <label for="optionMDiffSegFParam">Men - Seg. W</label>
                             </div>
                             <div>
-                              <input type="radio" id="optionPlotSegFParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
-                              <label for="optionPlotSegFParamDiff">Segregated women</label>
+                              <input type="radio" id="optionMDiffTestFParam" name="groupToPlotParamDiff" value="MDiffTestF">
+                              <label for="optionMDiffTestFParam">Men - Test W</label>
                             </div>
                             <div>
-                              <input type="radio" id="optionPlotTestFParamDiff" name="groupToPlotParamDiff" value="TestFDiffSegF">
-                              <label for="optionPlotTestFParamDiff">Test women</label>
+                              <input type="radio" id="optionTestFDiffSegFParam" name="groupToPlotParamDiff" value="TestFDiffSegF">
+                              <label for="optionTestFDiffSegFParam">Test W - Seg. W</label>
                             </div>
                         </div>
                     </div>
-                    <button onclick="addNewParamSeries()" >Add to plot</button>
-                    <button onclick="addNewParamSeries(true)" >Add running average plot</button>
-                    <button onclick="clearPlot('param')" >Clear plot</button>
+                    <button onclick="addNewParamDiffSeries()" >Add to plot</button>
+                    <button onclick="addNewParamDiffSeries(true)" >Add running average plot</button>
+                    <button onclick="clearPlot('diffParam')" >Clear plot</button>
                 </div>
             </div>
         </div>

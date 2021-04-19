@@ -9,7 +9,7 @@ body {
     display: flex;
     margin: 0 20px;
 }
-.diff-dashboard {
+.diff-dashboard, .param-dashboard, .param-diff-dashboard {
     /* Initially hide this dashboard */
     display: none;
 }

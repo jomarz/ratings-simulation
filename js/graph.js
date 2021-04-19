@@ -16,6 +16,9 @@ var plots = {
     },
     diff: {
         numGroups: 0
+    },
+    diffParam: {
+        numGroups: 0
     }
 };
 // append the svg object to the body of the page
@@ -85,8 +88,7 @@ paramSeries.maxBenefits.forEach(maxBenefit => {
         });
     });
 });
-console.log(runs);
-console.log(paramRuns);
+
 // A color scale: one color for each group
 var myColor = d3.scaleOrdinal()
     .domain(groups)
@@ -213,7 +215,6 @@ d3.csv("./PARAMETER_8pct_BASE_2010_source-table.csv", function (data) {
 var i = 0;
     //Read the data
   data.forEach(row => {
-      if(i==0) {console.log(row); i++;}
       if (paramRuns[row['MAX_BENEFIT']][row['IDEAL_CHALLENGE']][row['BENEFIT_SPREAD']][row['[run number]']] === undefined) {
           paramRuns[row['MAX_BENEFIT']][row['IDEAL_CHALLENGE']][row['BENEFIT_SPREAD']][row['[run number]']] = {
           name: 'maxBenefit: ' + row['MAX_BENEFIT'] + ' idealChallenge: ' + row['IDEAL_CHALLENGE'] + ' benefitSpread: ' + row['BENEFIT_SPREAD'] + ' repetitionNbr: ' + row['[run number]'],
@@ -231,7 +232,6 @@ var i = 0;
   
       });
   });
-  console.log(paramRuns);
 });
 
 var numGroupsTop20 = 0;
@@ -291,6 +291,33 @@ const plotDiffGroup = function (fractionW, segregationPref, group, runningAvg = 
         .attr("class", "series");        
 }
 
+const plotParamDiffGroup = function (maxBenefit, idealChallenge, benefitSpread, group, runningAvg = false) {
+    var runsToChart = Object.values(paramRuns[maxBenefit][idealChallenge][benefitSpread]);
+    var groupToPlot = (runningAvg ? group+'RunningAvg' : group);
+    // Add the lines
+    var newColor = getNewColor("diffParam");
+    var line = d3.line()
+        .x(function (d) {            
+            return x(+d.step)
+        })
+        .y(function (d) {
+            return yDiff(+d[groupToPlot])
+        })
+    svgParamDiff.selectAll("myLines")
+        .data(runsToChart)
+        .enter()
+        .append("path")
+        .attr("d", function (d) {
+            return line(d.values)
+        })
+        .attr("stroke", function (d) {
+            return newColor;
+        })
+        .style("stroke-width", 1)
+        .style("fill", "none")
+        .attr("class", "series");        
+}
+
 const addNewSeries = function (runningAvg = false) 
 {
     let fractionW = d3.select('.top20-dashboard input[name="fractionW"]:checked').node().value;
@@ -308,6 +335,16 @@ const addNewDiffSeries = function (runningAvg = false)
     plotDiffGroup(fractionW, segPreference, groupToPlot, runningAvg);
     insertLegendItem("ratingDiff-legend", groupNames[groupToPlot]+" Part:"+fractionW+" Seg:"+segPreference,getNewColor("diff"));
     plots.diff.numGroups ++;
+}
+const addNewParamDiffSeries = function (runningAvg = false) 
+{
+    let maxBenefit = d3.select('.param-diff-dashboard input[name="max-benefit-diff"]:checked').node().value;
+    let idealChallenge = d3.select('.param-diff-dashboard input[name="ideal-challenge-diff"]:checked').node().value;
+    let benefitSpread = d3.select('.param-diff-dashboard input[name="spread-diff"]:checked').node().value;
+    let groupToPlot = d3.select('.param-diff-dashboard input[name="groupToPlotParamDiff"]:checked').node().value;
+    plotParamDiffGroup(maxBenefit, idealChallenge, benefitSpread, groupToPlot, runningAvg);
+    insertLegendItem("param-diff-legend", groupNames[groupToPlot]+" MaxB:"+maxBenefit+" IdealCh:"+idealChallenge+" Spread: "+benefitSpread, getNewColor("diffParam"));
+    plots.diffParam.numGroups ++;
 }
 
 const clearPlot = function (plotName)
